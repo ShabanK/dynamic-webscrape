@@ -1,29 +1,43 @@
 const { Builder, By, Key, until } = require("selenium-webdriver");
 const cheerio = require("cheerio");
 
+const low = require("lowdb");
+const FileSync = require("lowdb/adapters/FileSync");
+
+const adapter = new FileSync("testData.json");
+const db = low(adapter);
+
 //todo
 //figure out how to pass states as abbreviations
 //set up lowdb
 //save data in lowdb
 //loop
 
-function returnState(abbr) {}
+// function returnState(abbr) {}
 
-async function foo() {
+async function main() {
+  const arrOfAddresses = await db.get("Sheet1").value();
+  // console.log(arrOfAddresses.length);
+  // arrOfAddresses.forEach((e) => {
+  //   const { ID, Address, City, State } = e;
+  //   // console.log(ID, Address, City, State);
+  //   await foo(Address, City, State);
+  // });
+}
+
+async function foo(Address, City, State) {
   let driver = await new Builder().forBrowser("chrome").build();
   try {
     await driver.get("https://data.hrsa.gov/tools/shortage-area/by-address");
 
     //enter address
-    await driver
-      .findElement(By.id("inputAddress"))
-      .sendKeys("2197 W DIMOND BLVD");
+    await driver.findElement(By.id("inputAddress")).sendKeys(Address);
 
     //enter city
-    await driver.findElement(By.id("inputCity")).sendKeys("ANCHORAGE");
+    await driver.findElement(By.id("inputCity")).sendKeys(City);
 
     //enter state
-    await driver.findElement(By.id("ddlState")).sendKeys("Alabama");
+    await driver.findElement(By.id("ddlState")).sendKeys(State);
 
     //click search
     await (await driver.findElement(By.id("btnDrill"))).click();
@@ -48,40 +62,39 @@ async function foo() {
     let $$$ = cheerio.load(list[4].html());
     let strYes = $$$("strong.text-success").text();
     let strNo = $$$("strong.text-danger").text();
-    console.log(strYes);
-    console.log(strNo);
-    if (strYes) {
-      console.log("Y");
-    }
-    if (strNo) {
-      console.log("N");
-    }
 
     let $$$$ = cheerio.load(list[5].html());
     let str2Yes = $$$$("strong.text-success").text();
     let str2No = $$$$("strong.text-danger").text();
-    console.log(str2Yes);
-    console.log(str2No);
-    if (str2Yes) {
-      console.log("Y");
+
+    let HSPA;
+    let MUA;
+
+    if (strYes) {
+      HSPA = "Y";
     }
-    if (str2No) {
-      console.log("N");
+    if (strNo) {
+      HSPA = "N";
     }
 
-    // console.log(list[5].html());
-    // list.forEach((e) => {
-    //   console.log(e.html());
-    // });
-    // console.log(
-    //   $$("strong").attr("class", "rural-analyzer-info-heading").html()
-    // );
-    // console.log(
-    //   $$("strong").attr("class", "rural-analyzer-info-heading").html()
-    // );
+    if (str2Yes) {
+      MUA = "Y";
+    }
+    if (str2No) {
+      MUA = "N";
+    }
+
+    db.get("Sheet1")
+      .find({
+        Address: Address,
+        City: City,
+        State: State,
+      })
+      .assign({ "Primary Care HPSA?": HSPA, "MUA?": MUA })
+      .write();
   } finally {
-    // await driver.quit();
+    await driver.quit();
     console.log("yay all done");
   }
 }
-foo();
+main();
