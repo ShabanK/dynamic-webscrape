@@ -23,12 +23,12 @@ async function foo() {
     await (await driver.findElement(By.id("btnDrill"))).click();
 
     //wait for data to fetch
-    await driver.wait(until.elementLocated(By.id("btnStartOver")), 13000);
+    await driver.wait(until.elementLocated(By.id("btnStartOver")), 15000);
 
     const pageSource = await driver.getPageSource();
-    const $ = cheerio.load(pageSource);
+    let $ = cheerio.load(pageSource);
     // console.log($("#resultPanel").html());
-    const $$ = cheerio.load($("#resultPanel").html());
+    let $$ = cheerio.load($("#resultPanel").html());
     // console.log($("#resultPanel").html());
     let list = [];
     $$("div[class='col-xs-12 col-md-4 col-md-pull-8']")
@@ -38,8 +38,20 @@ async function foo() {
       });
     console.log(list.length);
     console.log("START");
-    console.log(list[4].html());
-    console.log(list[5].html());
+    // console.log(list[4].html());
+    let $$$ = cheerio.load(list[4].html());
+    let strYes = $$$("strong.text-success").text();
+    let strNo = $$$("strong.text-danger").text();
+    console.log(strYes);
+    console.log(strNo);
+    if (strYes) {
+      console.log("Y");
+    }
+    if (strNo) {
+      console.log("N");
+    }
+
+    // console.log(list[5].html());
     // list.forEach((e) => {
     //   console.log(e.html());
     // });
