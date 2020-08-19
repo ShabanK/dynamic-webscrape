@@ -29,9 +29,21 @@ async function foo() {
     const $ = cheerio.load(pageSource);
     // console.log($("#resultPanel").html());
     const $$ = cheerio.load($("#resultPanel").html());
-    console.log(
-      $("strong").attr("class", "rural-analyzer-info-heading").html()
-    );
+    // console.log($("#resultPanel").html());
+    let list = [];
+    $$("div[class='col-xs-12 col-md-4 col-md-pull-8']")
+      .find("div>p")
+      .each((index, element) => {
+        list.push($(element));
+      });
+    console.log(list.length);
+    console.log("START");
+    list.forEach((e) => {
+      console.log(e.html());
+    });
+    // console.log(
+    //   $$("strong").attr("class", "rural-analyzer-info-heading").html()
+    // );
     // console.log(
     //   $$("strong").attr("class", "rural-analyzer-info-heading").html()
     // );
