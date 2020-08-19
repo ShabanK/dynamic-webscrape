@@ -9,23 +9,17 @@ const db = low(adapter);
 
 //todo
 //figure out how to pass states as abbreviations
-//set up lowdb
-//save data in lowdb
 //loop
 
 // function returnState(abbr) {}
 
 async function main() {
   const arrOfAddresses = await db.get("Sheet1").value();
-  // console.log(arrOfAddresses.length);
-  // arrOfAddresses.forEach((e) => {
-  //   const { ID, Address, City, State } = e;
-  //   // console.log(ID, Address, City, State);
-  //   await foo(Address, City, State);
-  // });
+  const { Address, City, State } = arrOfAddresses[0];
+  await foo(Address, City, State, 0, arrOfAddresses);
 }
 
-async function foo(Address, City, State) {
+async function foo(Address, City, State, Index, arrOfAddresses) {
   let driver = await new Builder().forBrowser("chrome").build();
   try {
     await driver.get("https://data.hrsa.gov/tools/shortage-area/by-address");
@@ -47,9 +41,7 @@ async function foo(Address, City, State) {
 
     const pageSource = await driver.getPageSource();
     let $ = cheerio.load(pageSource);
-    // console.log($("#resultPanel").html());
     let $$ = cheerio.load($("#resultPanel").html());
-    // console.log($("#resultPanel").html());
     let list = [];
     $$("div[class='col-xs-12 col-md-4 col-md-pull-8']")
       .find("div>p")
@@ -58,7 +50,6 @@ async function foo(Address, City, State) {
       });
     console.log(list.length);
     console.log("START");
-    // console.log(list[4].html());
     let $$$ = cheerio.load(list[4].html());
     let strYes = $$$("strong.text-success").text();
     let strNo = $$$("strong.text-danger").text();
@@ -92,9 +83,19 @@ async function foo(Address, City, State) {
       })
       .assign({ "Primary Care HPSA?": HSPA, "MUA?": MUA })
       .write();
+  } catch (err) {
+    console.log(err);
   } finally {
     await driver.quit();
+    console.log("here");
+    //condition for recursion
+    if (Index < arrOfAddresses.length - 2) {
+      Index++;
+      const { Address, City, State } = arrOfAddresses[Index];
+      await foo(Address, City, State, Index, arrOfAddresses);
+    }
     console.log("yay all done");
   }
 }
+
 main();
