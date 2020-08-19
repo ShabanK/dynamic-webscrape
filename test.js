@@ -1,6 +1,12 @@
 const { Builder, By, Key, until } = require("selenium-webdriver");
 const cheerio = require("cheerio");
 
+//todo
+//figure out how to pass states as abbreviations
+//set up lowdb
+//save data in lowdb
+//loop
+
 function returnState(abbr) {}
 
 async function foo() {
@@ -48,6 +54,18 @@ async function foo() {
       console.log("Y");
     }
     if (strNo) {
+      console.log("N");
+    }
+
+    let $$$$ = cheerio.load(list[5].html());
+    let str2Yes = $$$$("strong.text-success").text();
+    let str2No = $$$$("strong.text-danger").text();
+    console.log(str2Yes);
+    console.log(str2No);
+    if (str2Yes) {
+      console.log("Y");
+    }
+    if (str2No) {
       console.log("N");
     }
 
