@@ -38,9 +38,11 @@ async function foo() {
       });
     console.log(list.length);
     console.log("START");
-    list.forEach((e) => {
-      console.log(e.html());
-    });
+    console.log(list[4].html());
+    console.log(list[5].html());
+    // list.forEach((e) => {
+    //   console.log(e.html());
+    // });
     // console.log(
     //   $$("strong").attr("class", "rural-analyzer-info-heading").html()
     // );
