@@ -3,6 +3,7 @@ const cheerio = require("cheerio");
 
 const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
+const { tryParse } = require("selenium-webdriver/http");
 
 const adapter = new FileSync("testData.json");
 const db = low(adapter);
@@ -84,15 +85,21 @@ async function foo(Address, City, State, Index, arrOfAddresses) {
       .assign({ "Primary Care HPSA?": HSPA, "MUA?": MUA })
       .write();
   } catch (err) {
-    console.log(err);
+    console.log("ERR!", err);
   } finally {
     await driver.quit();
-    console.log("here");
     //condition for recursion
     if (Index < arrOfAddresses.length - 2) {
       Index++;
+      console.log("here");
+
       const { Address, City, State } = arrOfAddresses[Index];
-      await foo(Address, City, State, Index, arrOfAddresses);
+      try {
+        // console.log(Address, City, State, Index, arrOfAddresses);
+        await foo(Address, City, State, Index, arrOfAddresses);
+      } catch (err) {
+        console.log("ERR", err);
+      }
     }
     console.log("yay all done");
   }
