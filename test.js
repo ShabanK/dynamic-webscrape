@@ -23,6 +23,8 @@ async function main() {
 async function foo(Address, City, State, Index, arrOfAddresses) {
   let driver = await new Builder().forBrowser("chrome").build();
   try {
+    console.log("CREATED DRIVER");
+    console.log("HERE NOW");
     await driver.get("https://data.hrsa.gov/tools/shortage-area/by-address");
 
     //enter address
@@ -89,7 +91,7 @@ async function foo(Address, City, State, Index, arrOfAddresses) {
   } finally {
     await driver.quit();
     //condition for recursion
-    if (Index < arrOfAddresses.length - 2) {
+    if (Index < arrOfAddresses.length - 1) {
       Index++;
       console.log("here");
 

@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",
+    "chromedriver": "^84.0.1",
     "lowdb": "^1.0.0",
     "request": "^2.88.2",
     "selenium-webdriver": "^4.0.0-alpha.7"

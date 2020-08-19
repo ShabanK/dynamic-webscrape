@@ -16,7 +16,9 @@
       "Address": "7600 DEBARR RD",
       "City": "ANCHORAGE",
       "State": "Alaska",
-      "Zip - 5 digit": "99504"
+      "Zip - 5 digit": "99504",
+      "Primary Care HPSA?": "Y",
+      "MUA?": "N"
     },
     {
       "ID": "13656",
@@ -24,7 +26,9 @@
       "Address": "725 E NORTHERN LIGHTS BLVD",
       "City": "ANCHORAGE",
       "State": "Alaska",
-      "Zip - 5 digit": "99503"
+      "Zip - 5 digit": "99503",
+      "Primary Care HPSA?": "Y",
+      "MUA?": "Y"
     },
     {
       "ID": "13449",
@@ -32,7 +36,9 @@
       "Address": "12405 BRANDON ST",
       "City": "ANCHORAGE",
       "State": "Alaska",
-      "Zip - 5 digit": "99515"
+      "Zip - 5 digit": "99515",
+      "Primary Care HPSA?": "Y",
+      "MUA?": "N"
     },
     {
       "ID": "15362",
@@ -40,7 +46,9 @@
       "Address": "12051 OLD GLENN HWY",
       "City": "EAGLE RIVER",
       "State": "Alaska",
-      "Zip - 5 digit": "99577"
+      "Zip - 5 digit": "99577",
+      "Primary Care HPSA?": "Y",
+      "MUA?": "N"
     },
     {
       "ID": "15092",
