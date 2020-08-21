@@ -5,17 +5,18 @@ const low = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
 const { tryParse } = require("selenium-webdriver/http");
 
-const adapter = new FileSync("testData.json");
+const adapter = new FileSync("500.json");
 const db = low(adapter);
 
 //todo
 //figure out how to pass states as abbreviations
 //loop
-
+//60095
 // function returnState(abbr) {}
 
 async function main() {
   const arrOfAddresses = await db.get("Sheet1").value();
+  // console.log(arrOfAddresses.length);
   const { Address, City, State } = arrOfAddresses[0];
   await foo(Address, City, State, 0, arrOfAddresses);
 }
@@ -23,8 +24,6 @@ async function main() {
 async function foo(Address, City, State, Index, arrOfAddresses) {
   let driver = await new Builder().forBrowser("chrome").build();
   try {
-    console.log("CREATED DRIVER");
-    console.log("HERE NOW");
     await driver.get("https://data.hrsa.gov/tools/shortage-area/by-address");
 
     //enter address
@@ -40,7 +39,7 @@ async function foo(Address, City, State, Index, arrOfAddresses) {
     await (await driver.findElement(By.id("btnDrill"))).click();
 
     //wait for data to fetch
-    await driver.wait(until.elementLocated(By.id("btnStartOver")), 15000);
+    await driver.wait(until.elementLocated(By.id("btnStartOver")), 20000);
 
     const pageSource = await driver.getPageSource();
     let $ = cheerio.load(pageSource);
@@ -86,6 +85,7 @@ async function foo(Address, City, State, Index, arrOfAddresses) {
       })
       .assign({ "Primary Care HPSA?": HSPA, "MUA?": MUA })
       .write();
+    console.log("done");
   } catch (err) {
     console.log("ERR!", err);
   } finally {
